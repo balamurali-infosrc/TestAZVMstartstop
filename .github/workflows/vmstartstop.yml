@@ -24,7 +24,7 @@ jobs:
           az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Run VM Start/Stop Script
-        shell: pwsh
+        shell: cmd
         run: |
           az account show
           pwsh ./startstopvm.ps1 -Action ${{ github.event.inputs.action }}
