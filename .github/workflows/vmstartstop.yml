@@ -1,6 +1,6 @@
 name: Azure VM Start/Stop
 
-inputs:
+on:
   workflow_dispatch:
     inputs:
       action:
@@ -24,6 +24,7 @@ jobs:
           az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Run VM Start/Stop Script
+        shell: pwsh
         run: |
           az account show
           pwsh ./startstopvm.ps1 -Action ${{ github.event.inputs.action }}
