@@ -1,0 +1,29 @@
+name: Azure VM Start/Stop
+
+inputs:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Start or Stop the VM'
+        required: true
+        default: 'Start'
+
+jobs:
+  vm-control:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Setup Azure CLI
+        uses: azure/CLI@v1
+
+      - name: Login to Azure
+        run: |
+          az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
+          az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Run VM Start/Stop Script
+        run: |
+          az account show
+          pwsh ./startstopvm.ps1 -Action ${{ github.event.inputs.action }}
